@@ -25,12 +25,24 @@ def full_name_list(df):
     print(full_name_clean, "\n")
 
 
+def jobs_list(df):
+    """
+    Prints a list of all the different Jobs in the data.
+    Duplicated jobs would be repeated in the list.
+    """
+    jobs = df['Job'].tolist()
+    jobs_clean = sorted([x for x in jobs if str(x) != 'nan'])
+    print('Job list of all the clients: ')
+    print(jobs_clean)
+
+
 def main():
     """
     Main function that calls all the other functions
     """
     data = read_file()
     full_name_list(data)
+    jobs_list(data)
 
 
 main()
