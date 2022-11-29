@@ -21,7 +21,8 @@ def exception_handling(df):
     Handles the exceptions:
     Exceptions considered are:
     - Blank rows
-    - Row with at least 1 NaN argument
+    - Rows with a NaN arguments in one of the required fields
+    - Rows with a NaN arguments in one of the non-required fields
     """
     list_of_blank_rows = df.index[df.isnull().all(axis=1)].tolist()
 
@@ -41,7 +42,7 @@ def exception_handling(df):
             ' with NaN values in the required fields.\n'
             f'The index(es):  {req_rows_with_nan}\n'
         )
-    
+
     # Exception handling for non-required rows
     other_rows = df[['First Name', 'Last Name', 'Type', 'Job', 'Phone']]
     other_rows_with_nan = df.index[other_rows.isna().any(axis=1)].tolist()
