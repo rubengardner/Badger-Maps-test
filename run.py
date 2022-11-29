@@ -11,7 +11,7 @@ def read_file():
         file_name = 'data.csv'
         df = pd.read_csv(file_name)
         return df
-    except NameError:
+    except Exception:
         print('Error, the file could not be loaded')
 
 
