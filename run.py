@@ -15,11 +15,22 @@ def read_file():
         print('Error, the file could not be loaded')
 
 
+def full_name_list(df):
+    """
+    Prints a list with all the full names.
+    """
+    full_name = (df['First Name'] + ' ' + df['Last Name']).tolist()
+    full_name_clean = sorted([x for x in full_name if str(x) != 'nan'])
+    print('Full name list of all the clients: ')
+    print(full_name_clean, "\n")
+
+
 def main():
     """
     Main function that calls all the other functions
     """
     data = read_file()
-    print(data)
+    full_name_list(data)
+
 
 main()
