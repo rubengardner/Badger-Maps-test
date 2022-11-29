@@ -13,6 +13,7 @@ def read_file():
         return df
     except Exception:
         print('Error, the file could not be loaded')
+        exit()
 
 
 def exception_handling(df):
@@ -31,23 +32,23 @@ def exception_handling(df):
         )
     df.dropna(axis=0, how='all', inplace=True)
 
-    # Exception handling for requiered rows
+    # Exception handling for required rows
     req_rows = df[['Street', 'Zip', 'City', 'Last Check-In Date', 'Company']]
     req_rows_with_nan = df.index[req_rows.isna().any(axis=1)].tolist()
     if len(req_rows_with_nan) != 0:
         print(
             f'The data contains {len(req_rows_with_nan)} row(s)'
-            ' with NaN values in the requiered fields.\n'
+            ' with NaN values in the required fields.\n'
             f'The index(es):  {req_rows_with_nan}\n'
         )
     
-    # Exception handling for non-requiered rows
+    # Exception handling for non-required rows
     other_rows = df[['First Name', 'Last Name', 'Type', 'Job', 'Phone']]
     other_rows_with_nan = df.index[other_rows.isna().any(axis=1)].tolist()
     if len(other_rows_with_nan) != 0:
         print(
             f'The data contains {len(other_rows_with_nan)} row(s)'
-            ' with NaN values in the non-requiered fields.\n'
+            ' with NaN values in the non-required fields.\n'
             f'The index(es):  {other_rows_with_nan}\n'
         )
     df.dropna(axis=0, how='any', inplace=True)
