@@ -15,12 +15,51 @@ def read_file():
         print('Error, the file could not be loaded')
 
 
+def exception_handling(df):
+    """
+    Handles the exceptions:
+    Exceptions considered are:
+    - Blank rows
+    - Row with at least 1 NaN argument
+    """
+    list_of_blank_rows = df.index[df.isnull().all(axis=1)].tolist()
+
+    if len(list_of_blank_rows) != 0:
+        print(
+            f'The data contains {len(list_of_blank_rows)} blank row(s).\n'
+            f'The index(es):  {list_of_blank_rows}\n'
+        )
+    df.dropna(axis=0, how='all', inplace=True)
+
+    # Exception handling for requiered rows
+    req_rows = df[['Street', 'Zip', 'City', 'Last Check-In Date', 'Company']]
+    req_rows_with_nan = df.index[req_rows.isna().any(axis=1)].tolist()
+    if len(req_rows_with_nan) != 0:
+        print(
+            f'The data contains {len(req_rows_with_nan)} row(s)'
+            ' with NaN values in the requiered fields.\n'
+            f'The index(es):  {req_rows_with_nan}\n'
+        )
+    
+    # Exception handling for non-requiered rows
+    other_rows = df[['First Name', 'Last Name', 'Type', 'Job', 'Phone']]
+    other_rows_with_nan = df.index[other_rows.isna().any(axis=1)].tolist()
+    if len(other_rows_with_nan) != 0:
+        print(
+            f'The data contains {len(other_rows_with_nan)} row(s)'
+            ' with NaN values in the non-requiered fields.\n'
+            f'The index(es):  {other_rows_with_nan}\n'
+        )
+    df.dropna(axis=0, how='any', inplace=True)
+    return df
+
+
 def check_in_dates(df):
     """
-    Prints the users wich have the earliest and latest check
+    Prints the user's which have the earliest and latest check
     in date.
     Converts the columns 'Check-in Datetime' values into
-    datetime objects (Originally str)
+    DateTime objects (Originally str)
     """
     df['Check-in Datetime'] = pd.to_datetime(
         df['Last Check-In Date'], dayfirst=True, format="%d/%m/%Y"
@@ -66,10 +105,11 @@ def main():
     """
     Main function that calls all the other functions
     """
-    data = read_file()
-    check_in_dates(data)
-    full_name_list(data)
-    jobs_list(data)
+    raw_data = read_file()
+    clean_data = exception_handling(raw_data)
+    check_in_dates(clean_data)
+    full_name_list(clean_data)
+    jobs_list(clean_data)
 
 
 main()
