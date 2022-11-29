@@ -15,6 +15,32 @@ def read_file():
         print('Error, the file could not be loaded')
 
 
+def check_in_dates(df):
+    """
+    Prints the users wich have the earliest and latest check
+    in date.
+    Converts the columns 'Check-in Datetime' values into
+    datetime objects (Originally str)
+    """
+    df['Check-in Datetime'] = pd.to_datetime(
+        df['Last Check-In Date'], dayfirst=True, format="%d/%m/%Y"
+        )
+    user_min = df.loc[df['Check-in Datetime'] == df['Check-in Datetime'].min()]
+    user_max = df.loc[df['Check-in Datetime'] == df['Check-in Datetime'].max()]
+    print(
+        "Earliest check in date: \n"
+        f"{user_min['First Name'].iloc[0]} "
+        f"{user_min['Last Name'].iloc[0]}, "
+        f"{user_min['Check-in Datetime'].iloc[0].strftime('%d/%m/%Y')}\n"
+    )
+    print(
+        "Latest check in date:\n"
+        f"{user_max['First Name'].iloc[0]} "
+        f"{user_max['Last Name'].iloc[0]}, "
+        f"{user_max['Check-in Datetime'].iloc[0].strftime('%d/%m/%Y')}\n"
+    )
+
+
 def full_name_list(df):
     """
     Prints a list with all the full names.
@@ -41,6 +67,7 @@ def main():
     Main function that calls all the other functions
     """
     data = read_file()
+    check_in_dates(data)
     full_name_list(data)
     jobs_list(data)
 
